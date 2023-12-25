@@ -12,9 +12,7 @@ class CategoryController extends Controller
     public function showCategories($id)
     {
         $category = Categories::findorfail($id)->drugs;
-        //if ($category->fails())
         return response()->json(['data' => count($category)]);
-        // return response()->json(['message' => 'This category is empty']);
     }
 
     public function search(Request $request)
