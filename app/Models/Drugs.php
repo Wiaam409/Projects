@@ -16,6 +16,7 @@ class Drugs extends Model
         'classification',
         'companyName',
         'quantity',
+        'expires_at',
         'price',
     ];
 

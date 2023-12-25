@@ -21,6 +21,8 @@ class OrderController extends Controller
             if ($validator->fails()) {
                 return response()->json(['message' => 'invalid information']);
             }
+
+
             Order::create([
                 'user_id' => $user_id,
                 'scientificName' => $item['scientificName'],

@@ -34,6 +34,7 @@ class DrugsController extends Controller
             'tradeName' => 'required',
             'companyName' => 'required',
             'quantity' => 'required',
+            'expires_at' => 'required',
             'price' => 'required',
         ]);
         if ($validator->fails()) {
