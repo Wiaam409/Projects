@@ -26,4 +26,5 @@ Route::group( ['prefix' => 'user','middleware' => ['auth:user-api','scopes:user'
     Route::post('/search', [DrugsController::class, 'search']);
     Route::get('/showDetails/{id}', [DrugsController::class, 'showDetails']);
     Route::post('/makeOrder', [OrderController::class, 'makeOrder']);
+    Route::get('/statusOrder', [OrderController::class, 'statusOrder']);
 });
