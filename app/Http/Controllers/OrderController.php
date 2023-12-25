@@ -2,15 +2,20 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Drugs;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 class OrderController extends Controller
 {
+
     public function makeOrder(Request $request)
     {
+        $canNot[] = array();
+        $ind = 0;
         $input = $request->all();
         $user_id = Auth::id();
         foreach ($input as $item) {
@@ -21,8 +26,11 @@ class OrderController extends Controller
             if ($validator->fails()) {
                 return response()->json(['message' => 'invalid information']);
             }
-
-
+            $data = Drugs::where('scientificName', $item['scientificName'])->first();
+            if ($data == null || ($data != null && $data['quantity'] < $item['quantity'])) {
+                $canNot[$ind] = $item['scientificName'];
+                $ind++;
+            }
 
             Order::create([
                 'user_id' => $user_id,
@@ -30,11 +38,16 @@ class OrderController extends Controller
                 'quantity' => $item['quantity']
             ]);
         }
+        if ($ind > 0) {
+            return response()->json(['message' => 'We do not have enough ' . $item['scientificName'] . ' here']);
+        }
         return response()->json(['message' => 'Order has been sent successfully']);
     }
 
-    public function updateStatus()
+    public function statusOrder()
     {
-
+        $id = Auth::id();
+        $order = User::findorfail($id)->orders;
+        return response()->json(['data' => $order]);
     }
 }
