@@ -41,7 +41,7 @@ class OrderController extends Controller
         if ($ind > 0) {
             return response()->json(['success' => 'Your order has been sent successfully', 'failed' => 'But unfortunately we do not have enough : ', 'which failed : ' => array_values($canNot)]);
         }
-        return response()->json(['message' => 'Order has been sent successfully']);
+        return response()->json(['success' => 'Your order has been sent successfully', 'failed' => 0, 'which failed : ' => array_values($canNot)]);
     }
 
     public function statusOrder()
