@@ -23,6 +23,7 @@ class OrderController extends Controller
             }
 
 
+
             Order::create([
                 'user_id' => $user_id,
                 'scientificName' => $item['scientificName'],
@@ -30,5 +31,10 @@ class OrderController extends Controller
             ]);
         }
         return response()->json(['message' => 'Order has been sent successfully']);
+    }
+
+    public function updateStatus()
+    {
+
     }
 }

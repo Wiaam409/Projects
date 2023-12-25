@@ -13,7 +13,6 @@ class Order extends Model
         'user_id',
         'scientificName',
         'quantity',
-        'status'
     ];
 
     public function users()

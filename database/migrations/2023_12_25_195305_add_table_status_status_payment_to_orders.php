@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->string('status');
-            $table->string('statusPayment');
+            $table->string('status')->default('Preparing');
+            $table->string('statusPayment') ->default('UnPaid');
         });
     }
 
