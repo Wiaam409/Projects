@@ -20,7 +20,7 @@ class AuthController extends Controller
         ]);
         $phone = User::where('phone', $request->phone)->first();
         if ($phone != null) {
-            return response()->json(['error' => "Duplicated phone Number"]);
+            return response()->json(['error' => "this phone Number has already been registerd "]);
         }
         $user = User::create([
             'name' => $request->name,
@@ -38,9 +38,10 @@ class AuthController extends Controller
             'phone' => 'required|size:10',
             'password' => 'required|min:8',
         ]);
+        // check if phoneNumber has been
         $phone = Warehouse::where('phone', $request->phone)->first();
         if ($phone != null) {
-            return response()->json(['error' => "Duplicated phone Number"]);
+            return response()->json(['error' => "this phone Number has already been registerd "]);
         }
         $user = Warehouse::create([
             'name' => $request->name,

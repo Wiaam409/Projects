@@ -37,6 +37,12 @@ class DrugsController extends Controller
             'expires_at' => 'required',
             'price' => 'required',
         ]);
+        // if the medicine exists in the warehouse so you have to update the value without creating a new medicine
+        $exist = Drugs::where('scientificName', $request->scientificName)->first();
+        if ($exist != null) {
+            $exist['quantity'] += $request->quantity;
+            return response()->json(['message' => 'Drug stored successflly']);
+        }
         if ($validator->fails()) {
             return response()->json(['message' => 'uncompoleted information']);
         }
