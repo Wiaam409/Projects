@@ -10,18 +10,17 @@ use App\Notifications\NewOrder;
 use Hamcrest\Number\OrderingComparisonTest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
+
 //use Illuminate\Notifications\Notification;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+
 class OrderController extends Controller
 {
 
     public function makeOrder(Request $request)
     {
-        // array to store the orders that can not be sent or executed
-        $canNot[] = array();
-        $ind = 0;
         $input = $request->all();
         $user_id = Auth::id();
         foreach ($input as $order) {
@@ -59,7 +58,7 @@ class OrderController extends Controller
     {
         // showing orders for user
         $id = Auth::id();
-        $order = User::findorfail($id)->orders;
+        $order = User::find($id)->orders;
         return response()->json(['data' => $order]);
     }
 
@@ -100,7 +99,9 @@ class OrderController extends Controller
                 return response()->json(['mesage' => 'Sent the order first!']);
             $order['status'] = 'recieved';
         }
+        if ($order['statusPayment'] == 'Paid') $order['statusPayment'] = 'paid';
         $order->save();
+        Notification::send($order['user_id'], new NewOrder($order['id'], $order['status']));
         return response()->json(['mesage' => $order]);
     }
 }

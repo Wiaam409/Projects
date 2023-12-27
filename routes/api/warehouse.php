@@ -20,6 +20,7 @@ Route::post('warehouse/register',[AuthController::class, 'warehouseRegister']);
 Route::post('warehouse/login',[AuthController::class, 'warehouseLogin']);
 Route::group( ['prefix' => 'warehouse','middleware' => ['auth:warehouse-api','scopes:warehouse'] ],function(){
     // authenticated staff routes here
+    Route::get('/showAllMedicines', [DrugsController::class, 'showAllMedicines']);
     Route::post('/store', [DrugsController::class, 'store']);
     Route::get('/showDetails/{id}', [DrugsController::class, 'showDetails']);
     Route::post('logout',[AuthController::class, 'warehouseLogout']);

@@ -11,6 +11,10 @@ use Validator;
 
 class DrugsController extends Controller
 {
+    public function showAllMedicines(){
+        $medicines = Drugs::all();
+        return Response()->json(['medicines' => $medicines]);
+    }
     public function showCategories($id)
     {
         $category = Categories::findorfail($id)->drugs;

@@ -7,28 +7,22 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
+
 class UpdateStatusOrder extends Notification
 {
     use Queueable;
+    private $order_id, $new_status;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct()
+    public function __construct($order_id, $new_status)
     {
-        //
+        $this->$order_id = $order_id;
+        $this->$new_status = $new_status;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
     public function via(object $notifiable): array
     {
         return ['database'];
     }
-
 
     /**
      * Get the array representation of the notification.
@@ -38,7 +32,8 @@ class UpdateStatusOrder extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            //
+            'order_id' => $this->order_id,
+            'new_status' => $this->new_status,
         ];
     }
 }
