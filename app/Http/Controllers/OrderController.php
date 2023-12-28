@@ -7,12 +7,10 @@ use App\Models\Order;
 use App\Models\User;
 use App\Models\Warehouse;
 use App\Notifications\NewOrder;
+use App\Notifications\UpdateStatusOrder;
 use Hamcrest\Number\OrderingComparisonTest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
-
-//use Illuminate\Notifications\Notification;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
@@ -48,8 +46,10 @@ class OrderController extends Controller
                 'scientificName' => $order['scientificName'],
                 'quantity' => $order['quantity']
             ]);
-            $warehouse = Warehouse::find(1);
-            Notification::send($warehouse, new NewOrder(2, $user_id));
+            $order_id = count(Order::all());
+            $warehouse = Warehouse::find(3);//where('id', 3)->first();
+            $warehouse->notify(new NewOrder($order_id, $user_id));
+            //Notification::send($warehouse, new NewOrder(2, $user_id));
         }
         return response()->json(['success' => 'Your order has been sent successfully']);
     }
@@ -103,7 +103,8 @@ class OrderController extends Controller
         if ($request['statusPayment'] == 'Paid' && $order['status'] != 'Request could not be executed')
             $order['statusPayment'] = 'paid';
         $order->save();
-        Notification::send($order['user_id'], new NewOrder($order['id'], $order['status']));
+        $user = User::where('id', $order['user_id'])->first();
+        Notification::send($user, new UpdateStatusOrder($order['id'], $order['status']));
         return response()->json(['mesage' => $order]);
     }
 }

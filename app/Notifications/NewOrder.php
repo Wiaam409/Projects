@@ -2,19 +2,20 @@
 
 namespace App\Notifications;
 
+use http\Env\Response;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use App\Http\Controllers\OrderController;
+use App\Models\Warehouse;
 
 class NewOrder extends Notification
 {
     use Queueable;
-    private $order_id, $user_id;
+    public $order_id = 0, $user_id = 0;
 
-    public function __construct($order_id, $user_id)
-    {
+    public function __construct($order_id, $user_id) {
         $this->$order_id = $order_id;
         $this->$user_id = $user_id;
     }
@@ -24,16 +25,11 @@ class NewOrder extends Notification
         return ['database'];
     }
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
     public function toArray(object $notifiable): array
     {
         return [
-            'order_id' => $this->order_id,
             'user_id' => $this->user_id,
+            'order_id' => $this->order_id,
         ];
     }
 }

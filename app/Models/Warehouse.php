@@ -8,8 +8,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Passport\HasApiTokens;
 class Warehouse extends Authenticatable
 {
-    use HasFactory,HasApiTokens;
-
+    use HasFactory,HasApiTokens, Notifiable;
     protected $fillable = [
         'name',
         'phone',
