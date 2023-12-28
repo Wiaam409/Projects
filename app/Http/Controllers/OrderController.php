@@ -99,7 +99,9 @@ class OrderController extends Controller
                 return response()->json(['mesage' => 'Sent the order first!']);
             $order['status'] = 'recieved';
         }
-        if ($order['statusPayment'] == 'Paid') $order['statusPayment'] = 'paid';
+        // update the status payment
+        if ($request['statusPayment'] == 'Paid' && $order['status'] != 'Request could not be executed')
+            $order['statusPayment'] = 'paid';
         $order->save();
         Notification::send($order['user_id'], new NewOrder($order['id'], $order['status']));
         return response()->json(['mesage' => $order]);
