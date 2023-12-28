@@ -39,5 +39,4 @@ Route::group( ['prefix' => 'user','middleware' => ['auth:user-api','scopes:user'
     Route::delete('/desroyfavorites', [DrugsController::class, 'desroyfavorites']);
     // get user's notifications
     Route::get('/getNotifications', [NotificationController::class, 'getNotifications']);
-
 });

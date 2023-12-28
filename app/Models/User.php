@@ -50,13 +50,13 @@ class User extends Authenticatable
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      */
-    public function wishlist()
+    public function favoritesList()
     {
-        return $this->belongsToMany(Drugs::class, 'wishlists')->withTimestamps();
+        return $this->belongsToMany(Drugs::class, 'favorites')->withTimestamps();
     }
 
-    public function wishlistHas($drugId)
+    public function favoritesListHas($drugId)
     {
-        return self::wishlist()->where('drugs_id',$drugId)->exists();
+        return self::favoritesList()->where('drugs_id',$drugId)->exists();
     }
 }
