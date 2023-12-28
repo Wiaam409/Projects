@@ -67,7 +67,7 @@ class DrugsController extends Controller
         return response()->json(['error' => 'It is empty']);
     }
     public function addfavorites(){
-        if(!auth()->user()->favoritesListHas(request('drugId'))){
+        if(!auth()->user()->favoritesListHas(request('drug_id'))){
             auth()->user()->favoritesList()->attach(request('drugId'));
             return response()->json(['massage' => 'add to favorites']);
         }
@@ -82,6 +82,6 @@ class DrugsController extends Controller
 
     public function desroyfavorites(){
         auth()->user()->favoritesList()->detach(request('drug_id'));
-        return response()->json(['massage' => 'remove from favorites']);
+        return response()->json(['massage' => 'removed from favorites']);
     }
 }

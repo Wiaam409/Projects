@@ -55,8 +55,8 @@ class User extends Authenticatable
         return $this->belongsToMany(Drugs::class, 'favorites')->withTimestamps();
     }
 
-    public function favoritesListHas($drugId)
+    public function favoritesListHas($drug_id)
     {
-        return self::favoritesList()->where('drugs_id',$drugId)->exists();
+        return self::favoritesList()->where('drugs_id',$drug_id)->exists();
     }
 }
