@@ -45,4 +45,18 @@ class User extends Authenticatable
     public function orders() {
         return $this->hasMany(Order::class,'user_id');
     }
+    /**
+     * The wishlist that belong to the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function wishlist()
+    {
+        return $this->belongsToMany(Drugs::class, 'wishlists')->withTimestamps();
+    }
+
+    public function wishlistHas($drugId)
+    {
+        return self::wishlist()->where('drugs_id',$drugId)->exists();
+    }
 }

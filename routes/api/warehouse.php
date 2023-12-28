@@ -20,11 +20,20 @@ Route::post('warehouse/register',[AuthController::class, 'warehouseRegister']);
 Route::post('warehouse/login',[AuthController::class, 'warehouseLogin']);
 Route::group( ['prefix' => 'warehouse','middleware' => ['auth:warehouse-api','scopes:warehouse'] ],function(){
     // authenticated staff routes here
-    Route::get('/showAllMedicines', [DrugsController::class, 'showAllMedicines']);
-    Route::post('/store', [DrugsController::class, 'store']);
-    Route::get('/showDetails/{id}', [DrugsController::class, 'showDetails']);
     Route::post('logout',[AuthController::class, 'warehouseLogout']);
+    // get all medicines
+    Route::get('/showAllMedicines', [DrugsController::class, 'showAllMedicines']);
+    // store medicines
+    Route::post('/store', [DrugsController::class, 'store']);
+    // show medicines in details
+    Route::get('/showDetails/{id}', [DrugsController::class, 'showDetails']);
+    // Orders
     Route::get('/showOrders', [OrderController::class, 'showOrders']);
+    // return a specific order by id
     Route::get('/showOrder/{order_id}', [OrderController::class, 'showOrder']);
     Route::post('/updateStatus/{order_id}', [OrderController::class, 'updateStatus']);
+    // favorites
+    Route::post('/addfavorites', [DrugsController::class, 'addfavorites']);
+    Route::get('/favorites', [DrugsController::class, 'favorites']);
+    Route::delete('/desroyfavorites', [DrugsController::class, 'desroyfavorites']);
 });

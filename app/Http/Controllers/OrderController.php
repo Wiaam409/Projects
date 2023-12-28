@@ -19,6 +19,7 @@ class OrderController extends Controller
 
     public function makeOrder(Request $request)
     {
+
         $input = $request->all();
         $user_id = Auth::id();
         foreach ($input as $order) {
