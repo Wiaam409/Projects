@@ -24,23 +24,12 @@ class OrderController extends Controller
         $user_id = Auth::id();
         foreach ($input as $order) {
             $validator = Validator::make($order, [
-                'scientificName' => 'required',
-                'quantity' => 'required',
+                'medicine.*.scientificName' => 'required',
+                'medicine.*.quantity' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['message' => 'invalid information']);
             }
-            // it's up to you , if you want to update and check the quantity is it enough or not
-            // so you decide the status of the order
-            /* $data = Drugs::where('scientificName', $order['scientificName'])->first();
-            if ($data == null || ($data != null && $data['quantity'] < $order['quantity'])) {
-                $canNot[$ind] = $order['scientificName'];
-                $ind++;
-                continue;
-            }
-            /*$data['quantity'] -= $order['quantity'];
-            $data->save();
-            $order['status'] = 'sent';*/
             // creating the order in data base
             Order::create([
                 'user_id' => $user_id,

@@ -12,6 +12,9 @@ class NotificationController extends Controller
     public function getNotifications()
     {
         $user = User::find(Auth::id());
-        return response()->json(['Unread Notifications' => $user->notificatoins]);
+        if($user->notificatoins == null){
+            return response()->json(['Notifications' => 'Empty']);
+        }
+        return response()->json(['Notifications' => $user->notificatoins]);
     }
 }
