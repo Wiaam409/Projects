@@ -11,12 +11,11 @@ use Illuminate\Notifications\Notification;
 class UpdateStatusOrder extends Notification
 {
     use Queueable;
-    private $order_id, $new_status;
+    private $order;
 
-    public function __construct($order_id, $new_status)
+    public function __construct($order)
     {
-        $this->$order_id = $order_id;
-        $this->$new_status = $new_status;
+        $this->order = $order;
     }
 
     public function via(object $notifiable): array
@@ -32,8 +31,8 @@ class UpdateStatusOrder extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'order_id' => $this->order_id,
-            'new_status' => $this->new_status,
+            'order_id' => $this->order['id'],
+            'new_status' => $this->order['status'],
         ];
     }
 }

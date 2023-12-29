@@ -85,3 +85,4 @@ class DrugsController extends Controller
         return response()->json(['massage' => 'removed from favorites']);
     }
 }
+

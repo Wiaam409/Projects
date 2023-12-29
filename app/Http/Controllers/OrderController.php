@@ -24,21 +24,20 @@ class OrderController extends Controller
         $user_id = Auth::id();
         foreach ($input as $order) {
             $validator = Validator::make($order, [
-                'medicine.*.scientificName' => 'required',
-                'medicine.*.quantity' => 'required',
+                'scientificName' => 'required',
+                'quantity' => 'required',
             ]);
             if ($validator->fails()) {
                 return response()->json(['message' => 'invalid information']);
             }
             // creating the order in data base
-            Order::create([
+            $order_notify = Order::create([
                 'user_id' => $user_id,
                 'scientificName' => $order['scientificName'],
                 'quantity' => $order['quantity']
             ]);
-            $order_id = count(Order::all());
-            $warehouse = Warehouse::find(3);//where('id', 3)->first();
-            $warehouse->notify(new NewOrder($order_id, $user_id));
+            $warehouse = Warehouse::find(1);
+            $warehouse->notify(new NewOrder($order_notify));
             //Notification::send($warehouse, new NewOrder(2, $user_id));
         }
         return response()->json(['success' => 'Your order has been sent successfully']);
@@ -54,7 +53,7 @@ class OrderController extends Controller
 
     public function showOrders()
     {
-        $orders = Order::where('status', '!=', 'Request could not be executed');
+        $orders = Order::where('status', '!=', 'Request could not be executed')->get();
         return response()->json(['data' => $orders]);
     }
 
@@ -93,8 +92,8 @@ class OrderController extends Controller
         if ($request['statusPayment'] == 'Paid' && $order['status'] != 'Request could not be executed')
             $order['statusPayment'] = 'paid';
         $order->save();
-        $user = User::where('id', $order['user_id'])->first();
-        Notification::send($user, new UpdateStatusOrder($order['id'], $order['status']));
+        $user = Auth::user();
+        $user->notify(new UpdateStatusOrder($order));
         return response()->json(['mesage' => $order]);
     }
 }

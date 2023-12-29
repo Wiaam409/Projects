@@ -27,7 +27,7 @@ Route::group( ['prefix' => 'warehouse','middleware' => ['auth:warehouse-api','sc
     Route::post('/store', [DrugsController::class, 'store']);
     // show medicines in details
     Route::get('/showDetails/{id}', [DrugsController::class, 'showDetails']);
-    // Orders
+    // return all Orders
     Route::get('/showOrders', [OrderController::class, 'showOrders']);
     // return a specific order by id
     Route::get('/showOrder/{order_id}', [OrderController::class, 'showOrder']);

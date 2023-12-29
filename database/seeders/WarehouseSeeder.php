@@ -14,9 +14,9 @@ class WarehouseSeeder extends Seeder
     public function run(): void
     {
         Warehouse::create([
-            'name' => 'wassem' ,
-            'phone' =>'09999999988' ,
-            'password' => bcrypt(12345678),
+            'name' => 'Wiaam' ,
+            'phone' =>'0995374409' ,
+            'password' => bcrypt("wiaam0995374409"),
         ]);
     }
 }

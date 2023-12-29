@@ -13,11 +13,9 @@ use App\Models\Warehouse;
 class NewOrder extends Notification
 {
     use Queueable;
-    public $order_id = 0, $user_id = 0;
-
-    public function __construct($order_id, $user_id) {
-        $this->$order_id = $order_id;
-        $this->$user_id = $user_id;
+    private $order;
+    public function __construct($order) {
+        $this->order = $order;
     }
 
     public function via(object $notifiable): array
@@ -28,8 +26,8 @@ class NewOrder extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'user_id' => $this->user_id,
-            'order_id' => $this->order_id,
+            'user_id' => $this->order->user_id,
+            'order_id' => $this->order['id'] ,
         ];
     }
 }
