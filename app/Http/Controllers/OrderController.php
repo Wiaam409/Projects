@@ -19,26 +19,27 @@ class OrderController extends Controller
 
     public function makeOrder(Request $request)
     {
-
         $input = $request->all();
         $user_id = Auth::id();
+        $validator = Validator::make($input, [
+            'medicine.*.scientificName' => 'required',
+            'medicine.*.quantity' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['message' => 'invalid information']);
+        }
+        // creating the order in data base
         foreach ($input as $order) {
-            $validator = Validator::make($order, [
-                'scientificName' => 'required',
-                'quantity' => 'required',
-            ]);
-            if ($validator->fails()) {
-                return response()->json(['message' => 'invalid information']);
+            foreach ($order as $value) {
+                $order_notify = Order::create([
+                    'user_id' => $user_id,
+                    'scientificName' => $value['scientificName'],
+                    'quantity' => $value['quantity']
+                ]);
+                $warehouse = Warehouse::find(1);
+                $warehouse->notify(new NewOrder($order_notify));
+                //Notification::send($warehouse, new NewOrder(2, $user_id));
             }
-            // creating the order in data base
-            $order_notify = Order::create([
-                'user_id' => $user_id,
-                'scientificName' => $order['scientificName'],
-                'quantity' => $order['quantity']
-            ]);
-            $warehouse = Warehouse::find(1);
-            $warehouse->notify(new NewOrder($order_notify));
-            //Notification::send($warehouse, new NewOrder(2, $user_id));
         }
         return response()->json(['success' => 'Your order has been sent successfully']);
     }
