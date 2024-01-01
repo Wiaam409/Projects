@@ -93,7 +93,7 @@ class OrderController extends Controller
         if ($request['statusPayment'] == 'Paid' && $order['status'] != 'Request could not be executed')
             $order['statusPayment'] = 'paid';
         $order->save();
-        $user = Auth::user();
+        $user = User::find($order['user_id']);
         $user->notify(new UpdateStatusOrder($order));
         return response()->json(['mesage' => $order]);
     }

@@ -1,4 +1,3 @@
-
 <?php
 
 use App\Http\Controllers\NotificationController;
@@ -7,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\drugsController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,11 +17,11 @@ use App\Http\Controllers\drugsController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('warehouse/register',[AuthController::class, 'warehouseRegister']);
-Route::post('warehouse/login',[AuthController::class, 'warehouseLogin']);
-Route::group( ['prefix' => 'warehouse','middleware' => ['auth:warehouse-api','scopes:warehouse'] ],function(){
+Route::post('warehouse/register', [AuthController::class, 'warehouseRegister']);
+Route::post('warehouse/login', [AuthController::class, 'warehouseLogin']);
+Route::group(['prefix' => 'warehouse', 'middleware' => ['auth:warehouse-api', 'scopes:warehouse']], function () {
     // authenticated staff routes here
-    Route::post('logout',[AuthController::class, 'warehouseLogout']);
+    Route::post('logout', [AuthController::class, 'warehouseLogout']);
     // get all medicines
     Route::get('/showAllMedicines', [DrugsController::class, 'showAllMedicines']);
     // store medicines
@@ -37,5 +37,7 @@ Route::group( ['prefix' => 'warehouse','middleware' => ['auth:warehouse-api','sc
     Route::post('/addfavorites', [DrugsController::class, 'addfavorites']);
     Route::get('/favorites', [DrugsController::class, 'favorites']);
     Route::delete('/desroyfavorites', [DrugsController::class, 'desroyfavorites']);
+
     Route::get('/getNotifications', [NotificationController::class, 'getNotifications']);
+    Route::put('/readNotification/{id}', [NotificationController::class, 'readNotificationWarehouse']);
 });

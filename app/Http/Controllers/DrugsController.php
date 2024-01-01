@@ -69,33 +69,10 @@ class DrugsController extends Controller
         return response()->json(['error' => 'It is empty']);
     }
 
-    public function addfavorites(){
-        if(!auth()->user()->favoritesListHas(request('drug_id'))){
-            auth()->user()->favoritesList()->attach(request('drugId'));
-            return response()->json(['massage' => 'add to favorites']);
-        }
-        return response()->json(['massage' => 'it has already beed added']);
-    }
-
-    public function favorites(){
-        $drug = auth()->user()->favoritesList()
-            ->latest()->get();
-        return response()->json(['data' => $drug]);
-    }
-
-    public function desroyfavorites(){
-        auth()->user()->favoritesList()->detach(request('drug_id'));
-        return response()->json(['massage' => 'removed from favorites']);
-    }
-
-    /*public function addfavorites(Request $request)
+    public function addfavorites()
     {
-        $validator = Validator::make($request->all(), [
-            'drug_id' => 'required'
-        ]);
-        if ($validator->fails()) return response()->json(['erros' => $validator->errors()]);
-        if (!auth()->user()->favoritesListHas($request->drug_id)) {
-            auth()->user()->favoritesList()->attach($request->drug_id);
+        if (!auth()->user()->favoritesListHas(request('drug_id'))) {
+            auth()->user()->favoritesList()->attach(request('drugId'));
             return response()->json(['massage' => 'add to favorites']);
         }
         return response()->json(['massage' => 'it has already beed added']);
@@ -108,10 +85,10 @@ class DrugsController extends Controller
         return response()->json(['data' => $drug]);
     }
 
-    public function desroyfavorites(Request $request)
+    public function desroyfavorites()
     {
-        auth()->user()->favoritesList()->detach($request['drug_id']);
+        auth()->user()->favoritesList()->detach(request('drug_id'));
         return response()->json(['massage' => 'removed from favorites']);
-    }*/
+    }
 }
 
