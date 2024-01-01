@@ -11,10 +11,10 @@ class NotificationController extends Controller
 {
     public function getNotifications()
     {
-        $user = User::find(Auth::id());
-        if($user->notificatoins == null){
-            return response()->json(['Notifications' => 'Empty']);
+        $notifications = [];
+        foreach (Auth::user()->unreadNotifications as $notification) {
+            $notifications[] = $notification->data;
         }
-        return response()->json(['Notifications' => $user->notificatoins]);
+        return response()->json(['Notifications' => $notifications]);
     }
 }

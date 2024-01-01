@@ -1,6 +1,7 @@
 
 <?php
 
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -36,4 +37,5 @@ Route::group( ['prefix' => 'warehouse','middleware' => ['auth:warehouse-api','sc
     Route::post('/addfavorites', [DrugsController::class, 'addfavorites']);
     Route::get('/favorites', [DrugsController::class, 'favorites']);
     Route::delete('/desroyfavorites', [DrugsController::class, 'desroyfavorites']);
+    Route::get('/getNotifications', [NotificationController::class, 'getNotifications']);
 });

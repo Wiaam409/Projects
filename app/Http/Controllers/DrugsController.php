@@ -11,10 +11,12 @@ use Validator;
 
 class DrugsController extends Controller
 {
-    public function showAllMedicines(){
+    public function showAllMedicines()
+    {
         $medicines = Drugs::all();
         return Response()->json(['medicines' => $medicines]);
     }
+
     public function showCategories($id)
     {
         $category = Categories::findorfail($id)->drugs;
@@ -41,14 +43,14 @@ class DrugsController extends Controller
             'expires_at' => 'required',
             'price' => 'required',
         ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => 'uncompleted information']);
+        }
         // if the medicine exists in the warehouse so you have to update the value without creating a new medicine
         $exist = Drugs::where('scientificName', $request->scientificName)->first();
         if ($exist != null) {
             $exist['quantity'] += $request->quantity;
             return response()->json(['message' => 'Drug stored successflly']);
-        }
-        if ($validator->fails()) {
-            return response()->json(['message' => 'uncompoleted information']);
         }
         Drugs::create($input);
         return response()->json(['message' => 'Drug stored successflly']);
@@ -66,6 +68,7 @@ class DrugsController extends Controller
         }
         return response()->json(['error' => 'It is empty']);
     }
+
     public function addfavorites(){
         if(!auth()->user()->favoritesListHas(request('drug_id'))){
             auth()->user()->favoritesList()->attach(request('drugId'));
@@ -84,5 +87,31 @@ class DrugsController extends Controller
         auth()->user()->favoritesList()->detach(request('drug_id'));
         return response()->json(['massage' => 'removed from favorites']);
     }
+
+    /*public function addfavorites(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'drug_id' => 'required'
+        ]);
+        if ($validator->fails()) return response()->json(['erros' => $validator->errors()]);
+        if (!auth()->user()->favoritesListHas($request->drug_id)) {
+            auth()->user()->favoritesList()->attach($request->drug_id);
+            return response()->json(['massage' => 'add to favorites']);
+        }
+        return response()->json(['massage' => 'it has already beed added']);
+    }
+
+    public function favorites()
+    {
+        $drug = auth()->user()->favoritesList()
+            ->latest()->get();
+        return response()->json(['data' => $drug]);
+    }
+
+    public function desroyfavorites(Request $request)
+    {
+        auth()->user()->favoritesList()->detach($request['drug_id']);
+        return response()->json(['massage' => 'removed from favorites']);
+    }*/
 }
 
