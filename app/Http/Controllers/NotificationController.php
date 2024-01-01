@@ -38,4 +38,24 @@ class NotificationController extends Controller
             ->pluck('id');
         DB::table('notifications')->where('id', $ID)->update(['read_at' => now()]);
     }
+
+    public function markAllAsReadUser()
+    {
+        $ID = DB::table('notifications')
+            ->where('type', 'App\Notifications\UpdateStatusOrder')
+            ->pluck('id');
+        foreach ($ID as $id) {
+            DB::table('notifications')->where('id', $id)->update(['read_at' => now()]);
+        }
+    }
+
+    public function markAllAsReadWarehouse()
+    {
+        $ID = DB::table('notifications')
+            ->where('type', 'App\Notifications\NewOrder')
+            ->pluck('id');
+        foreach ($ID as $id) {
+            DB::table('notifications')->where('id', $id)->update(['read_at' => now()]);
+        }
+    }
 }

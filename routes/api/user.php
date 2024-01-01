@@ -40,4 +40,5 @@ Route::group( ['prefix' => 'user','middleware' => ['auth:user-api','scopes:user'
     // get user's notifications
     Route::get('/getNotifications', [NotificationController::class, 'getNotifications']);
     Route::put('/readNotificationUser/{id}', [NotificationController::class, 'readNotificationUser']);
+    Route::put('/markAllAsReadUser', [NotificationController::class, 'markAllAsReadUser']);
 });

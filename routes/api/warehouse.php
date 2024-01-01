@@ -40,4 +40,6 @@ Route::group(['prefix' => 'warehouse', 'middleware' => ['auth:warehouse-api', 's
 
     Route::get('/getNotifications', [NotificationController::class, 'getNotifications']);
     Route::put('/readNotification/{id}', [NotificationController::class, 'readNotificationWarehouse']);
+    Route::put('/markAllAsReadWarehouse', [NotificationController::class, 'markAllAsReadWarehouse']);
+
 });
