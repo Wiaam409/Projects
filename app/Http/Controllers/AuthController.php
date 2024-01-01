@@ -20,7 +20,7 @@ class AuthController extends Controller
         ]);
         $phone = User::where('phone', $request->phone)->first();
         if ($phone != null) {
-            return response()->json(['error' => "this phone Number has already been registerd "]);
+            return response()->json(['error' => "this phone Number has already been used"]);
         }
         $user = User::create([
             'name' => $request->name,
@@ -74,7 +74,7 @@ class AuthController extends Controller
 
             return response()->json(['token' => $success['token']], 200);
         } else {
-            return response()->json(['error' => ['phone or Password is not correct.']], 200);
+            return response()->json(['error' => 'phone or Password is not correct.'], 200);
         }
     }
 
@@ -99,7 +99,7 @@ class AuthController extends Controller
 
             return response()->json(['token' => $success['token']], 200);
         } else {
-            return response()->json(['error' => ['phone or Password is not correct.']], 200);
+            return response()->json(['error' => 'phone or Password is not correct.'], 200);
         }
     }
 
