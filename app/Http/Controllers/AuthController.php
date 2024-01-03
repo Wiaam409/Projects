@@ -20,7 +20,7 @@ class AuthController extends Controller
         ]);
         $phone = User::where('phone', $request->phone)->first();
         if ($phone != null) {
-            return response()->json(['error' => "this phone Number has already been used"]);
+            return response()->json(['error' => "this phone Number has already been used"], 200);
         }
         $user = User::create([
             'name' => $request->name,
@@ -41,7 +41,7 @@ class AuthController extends Controller
         // check if phoneNumber has been
         $phone = Warehouse::where('phone', $request->phone)->first();
         if ($phone != null) {
-            return response()->json(['error' => "this phone Number has already been registerd "]);
+            return response()->json(['error' => "this phone Number has already been used"], 200);
         }
         $user = Warehouse::create([
             'name' => $request->name,

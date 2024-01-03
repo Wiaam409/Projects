@@ -13,34 +13,31 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
+use mysql_xdevapi\Exception;
 
 class OrderController extends Controller
 {
-
     public function makeOrder(Request $request)
     {
-        $input = $request->all();
+
         $user_id = Auth::id();
-        $validator = Validator::make($input, [
-            'medicine.*.scientificName' => 'required',
-            'medicine.*.quantity' => 'required',
+        $validator = Validator::make($request->all(), [
+            'scientificName' => 'required',
+            'quantity' => 'required',
         ]);
         if ($validator->fails()) {
             return response()->json(['message' => 'invalid information']);
         }
         // creating the order in data base
-        foreach ($input as $order) {
-            foreach ($order as $value) {
-                $order_notify = Order::create([
-                    'user_id' => $user_id,
-                    'scientificName' => $value['scientificName'],
-                    'quantity' => $value['quantity']
-                ]);
-                $warehouse = Warehouse::find(1);
-                $warehouse->notify(new NewOrder($order_notify));
-                //Notification::send($warehouse, new NewOrder(2, $user_id));
-            }
-        }
+        $order_notify = Order::create([
+            'user_id' => $user_id,
+            'scientificName' => $request->scientificName,
+            'quantity' => $request->quantity
+        ]);
+        $warehouse = Warehouse::find(1);
+        $warehouse->notify(new NewOrder($order_notify));
+        //Notification::send($warehouse, new NewOrder(2, $user_id));
+
         return response()->json(['success' => 'Your order has been sent successfully']);
     }
 
@@ -90,7 +87,7 @@ class OrderController extends Controller
             $order['status'] = 'recieved';
         }
         // update the status payment
-        if ($request['statusPayment'] == 'Paid' && $order['status'] != 'Request could not be executed')
+        if ($request['statusPayment'] == 'paid' && $order['status'] != 'Request could not be executed')
             $order['statusPayment'] = 'paid';
         $order->save();
         $user = User::find($order['user_id']);
