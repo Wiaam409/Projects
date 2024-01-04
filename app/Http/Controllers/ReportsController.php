@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Middleware\ValidateSignature;
 use App\Models\Drugs;
 use http\Env\Response;
+use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 use Illuminate\Http\Request;

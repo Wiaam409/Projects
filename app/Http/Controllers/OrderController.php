@@ -19,8 +19,6 @@ class OrderController extends Controller
 {
     public function makeOrder(Request $request)
     {
-
-        $user_id = Auth::id();
         $validator = Validator::make($request->all(), [
             'scientificName' => 'required',
             'quantity' => 'required',
@@ -30,14 +28,12 @@ class OrderController extends Controller
         }
         // creating the order in data base
         $order_notify = Order::create([
-            'user_id' => $user_id,
+            'user_id' => Auth::id(),
             'scientificName' => $request->scientificName,
             'quantity' => $request->quantity
         ]);
         $warehouse = Warehouse::find(1);
         $warehouse->notify(new NewOrder($order_notify));
-        //Notification::send($warehouse, new NewOrder(2, $user_id));
-
         return response()->json(['success' => 'Your order has been sent successfully']);
     }
 

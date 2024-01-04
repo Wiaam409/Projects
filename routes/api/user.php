@@ -1,14 +1,15 @@
-
 <?php
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\drugsController;
+
 // use App\Http\Controllers\pharmacyController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
 use \App\Http\Controllers\NotificationController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -19,17 +20,18 @@ use \App\Http\Controllers\NotificationController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('user/register',[AuthController::class, 'userRegister']);
-Route::post('user/login',[AuthController::class, 'userLogin']);
-Route::group( ['prefix' => 'user','middleware' => ['auth:user-api','scopes:user'] ],function(){
+Route::post('user/register', [AuthController::class, 'userRegister']);
+Route::post('user/login', [AuthController::class, 'userLogin']);
+Route::group(['prefix' => 'user', 'middleware' => ['auth:user-api', 'scopes:user']], function () {
     // Auth
-    Route::post('logout',[AuthController::class, 'userLogout']);
+    Route::post('logout', [AuthController::class, 'userLogout']);
     // show medicines in categories
     Route::get('/showCategories/{id}', [DrugsController::class, 'showCategories']);
     // search for a medicine
     Route::post('/search', [DrugsController::class, 'search']);
     // show medicine in details
     Route::get('/showDetails/{id}', [DrugsController::class, 'showDetails']);
+    Route::get('/showOrder/{id}', [OrderController::class, 'showOrder']);
     // Orders
     Route::post('/makeOrder', [OrderController::class, 'makeOrder']);
     Route::get('/statusOrder', [OrderController::class, 'statusOrder']);

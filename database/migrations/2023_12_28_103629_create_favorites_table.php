@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('favorites', function (Blueprint $table) {
             $table->id();
             $table->integer('user_id')->constrains('users');
-            $table->integer('drug_id')->constrains('drugs');
+            $table->integer('drugs_id')->constrains('drugs');
             $table->timestamps();
         });
     }
