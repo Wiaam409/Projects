@@ -28,6 +28,8 @@ Route::group(['prefix' => 'warehouse', 'middleware' => ['auth:warehouse-api', 's
     Route::post('/store', [DrugsController::class, 'store']);
     // show medicines in details
     Route::get('/showDetails/{id}', [DrugsController::class, 'showDetails']);
+    // delete expired medicines
+    Route::delete('/deleteExpires', [DrugsController::class, 'deleteExpires']);
     // return all Orders
     Route::get('/showOrders', [OrderController::class, 'showOrders']);
     // return a specific order by id

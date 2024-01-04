@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\FavoritesController;
+use App\Http\Controllers\ReportsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\drugsController;
-
 // use App\Http\Controllers\pharmacyController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\OrderController;
@@ -36,14 +37,14 @@ Route::group(['prefix' => 'user', 'middleware' => ['auth:user-api', 'scopes:user
     Route::post('/makeOrder', [OrderController::class, 'makeOrder']);
     Route::get('/statusOrder', [OrderController::class, 'statusOrder']);
     // favorites
-    Route::post('/addfavorites', [DrugsController::class, 'addfavorites']);
-    Route::get('/favorites', [DrugsController::class, 'favorites']);
-    Route::delete('/desroyfavorites', [DrugsController::class, 'desroyfavorites']);
+    Route::post('/addfavorites', [FavoritesController::class, 'addfavorites']);
+    Route::get('/favorites', [FavoritesController::class, 'favorites']);
+    Route::delete('/desroyfavorites', [FavoritesController::class, 'desroyfavorites']);
     // get user's notifications
     Route::get('/getNotifications', [NotificationController::class, 'getNotifications']);
     Route::put('/readNotificationUser/{id}', [NotificationController::class, 'readNotificationUser']);
     Route::put('/markAllAsReadUser', [NotificationController::class, 'markAllAsReadUser']);
     //reports
-    Route::post('/userReports', [\App\Http\Controllers\ReportsController::class, 'userReports']);
+    Route::post('/userReports', [ReportsController::class, 'userReports']);
 
 });

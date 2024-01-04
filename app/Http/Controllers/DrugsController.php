@@ -11,6 +11,32 @@ use Validator;
 
 class DrugsController extends Controller
 {
+    public function store(Request $request)
+    {
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'category_id' => 'required|exists:App\Models\Categories,id',
+            'scientificName' => 'required',
+            'tradeName' => 'required',
+            'companyName' => 'required',
+            'quantity' => 'required',
+            'expires_at' => 'required|date',
+            'price' => 'required',
+        ]);
+        if ($validator->fails()) {
+            return response()->json(['error' => 'uncompleted information']);
+        }
+        // if the medicine exists in the warehouse so you have to update the value without creating a new medicine
+        $exist = Drugs::where('scientificName', $request->scientificName)->first();
+        if ($exist != null) {
+            $exist['quantity'] += $request->quantity;
+            $exist->save();
+            return response()->json(['message' => 'Drug stored successflly']);
+        }
+        Drugs::create($input);
+        return response()->json(['message' => 'Drug stored successflly']);
+    }
+
     public function showAllMedicines()
     {
         $medicines = Drugs::all();
@@ -31,31 +57,6 @@ class DrugsController extends Controller
         return Response()->json(['message' => $drug]);
     }
 
-    public function store(Request $request)
-    {
-        $input = $request->all();
-        $validator = Validator::make($input, [
-            'category_id' => 'required|exists:App\Models\Categories,id',
-            'scientificName' => 'required',
-            'tradeName' => 'required',
-            'companyName' => 'required',
-            'quantity' => 'required',
-            'expires_at' => 'required',
-            'price' => 'required',
-        ]);
-        if ($validator->fails()) {
-            return response()->json(['error' => 'uncompleted information']);
-        }
-        // if the medicine exists in the warehouse so you have to update the value without creating a new medicine
-        $exist = Drugs::where('scientificName', $request->scientificName)->first();
-        if ($exist != null) {
-            $exist['quantity'] += $request->quantity;
-            return response()->json(['message' => 'Drug stored successflly']);
-        }
-        Drugs::create($input);
-        return response()->json(['message' => 'Drug stored successflly']);
-    }
-
     public function search(Request $request)
     {
         $search_category = Categories::where('name', $request->categoryName)->first();
@@ -69,23 +70,16 @@ class DrugsController extends Controller
         return response()->json(['error' => 'It is empty']);
     }
 
-    public function addfavorites(){
-        if(!auth()->user()->favoritesListHas(request('drug_id'))){
-            auth()->user()->favoritesList()->attach(request('drug_id'));
-            return response()->json(['massage' => 'add to favorites']);
+    public function deleteExpires(Request $request)
+    {
+        $list = Drugs::whereBetween('expires_at', ["1-1-1", now()])->get();
+        if (count($list) == 0) {
+            return Response()->json(['message' => 'No expired medicines']);
         }
-        return response()->json(['massage' => 'it has already beed added']);
-    }
-
-    public function favorites(){
-        $drug = auth()->user()->favoritesList()
-            ->latest()->get();
-        return response()->json(['data' => $drug]);
-    }
-
-    public function desroyfavorites(){
-        auth()->user()->favoritesList()->detach(request('drug_id'));
-        return response()->json(['massage' => 'removed from favorites']);
+        foreach ($list as $item) {
+            $item->delete();
+        }
+        return response()->json(['data' => $list]);
     }
 }
 
