@@ -20,7 +20,6 @@ class Drugs extends Model
         'price',
     ];
 
-
     public function categories(){
         return $this->belongsTo(Categories::class,'category_id','id');
     }

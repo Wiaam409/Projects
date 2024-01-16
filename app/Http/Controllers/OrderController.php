@@ -53,15 +53,15 @@ class OrderController extends Controller
 
     public function showOrder($id)
     {
-        $order = Order::where('id', $id)->get();
+        $order = Order::where('id', $id)->first();
         return response()->json(['data' => $order]);
     }
 
     public function updateStatus(Request $request, $id)
     {
         $order = Order::find($id);
-        if ($request['status'] == 'sent') {
-            if ($order['status'] == 'sent' || $order['status'] == 'recieved') {
+        if ($request['status'] == 'Sent') {
+            if ($order['status'] == 'Sent' || $order['status'] == 'Received') {
                 return response()->json(['mesage' => 'This order has already been sent']);
             }
             // To check if There are enough medicine
@@ -71,20 +71,20 @@ class OrderController extends Controller
             } else {
                 //There are enough medicine so update the quantity in the ware house
                 $data['quantity'] -= $order['quantity'];
-                $order['status'] = 'sent';
+                $order['status'] = 'Sent';
                 $data->save();
             }
             // update the status
-        } else if ($request['status'] == 'recieved') {
+        } else if ($request['status'] == 'Received') {
             if ($order['status'] == 'Request could not be executed')
                 return response()->json(['mesage' => 'It is Impossible']);
-            if ($order['status'] == 'preparing')
+            if ($order['status'] == 'Preparing')
                 return response()->json(['mesage' => 'Sent the order first!']);
-            $order['status'] = 'recieved';
+            $order['status'] = 'Received';
         }
         // update the status payment
-        if ($request['statusPayment'] == 'paid' && $order['status'] != 'Request could not be executed')
-            $order['statusPayment'] = 'paid';
+        if ($request['statusPayment'] == 'Paid' && $order['status'] != 'Request could not be executed')
+            $order['statusPayment'] = 'Paid';
         $order->save();
         $user = User::find($order['user_id']);
         $user->notify(new UpdateStatusOrder($order));

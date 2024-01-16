@@ -24,7 +24,7 @@ class ReportsController extends Controller
         $orders = Order::where('statusPayment', 'paid')
             ->whereBetween('created_at', [$request['start_date'], $request['end_date']])
             ->get();
-        return response()->json(['data' => $orders]);
+        return response()->json(['number of orders' => count($orders), 'data' => $orders]);
     }
 
     public function userReports(Request $request)
